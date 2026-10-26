@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.title("🚗 Sistem Pilihan Servis Kenderaan (Nizar Auto)")
+st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors)")
 st.write("Sila pilih model kenderaan dan servis tambahan pilihan anda di bawah:")
 
 nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
@@ -20,7 +20,7 @@ if os.path.exists(nama_fail_excel):
     total_harga = 0.0
     
     # --- BAHAGIAN 1: SERVIS ASAS ---
-    st.subheader(f"📋 Senarai Servis Asas untuk: {model_pilihan}")
+    st.subheader(f"📋 Senarai Basic Service untuk: {model_pilihan}")
     
     for index, row in df.iterrows():
         item_servis = row['MODEL']
