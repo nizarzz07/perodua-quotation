@@ -34,7 +34,7 @@ if os.path.exists(nama_fail_excel):
   st.subheader(f"📋 Senarai Servis untuk: {model_pilihan}")
 
   # Senarai item optional (lalai = False / tidak dipilih, boleh tolak atau terima)
-  optional_items = ["INJECTOR CLEANER", "WINDSHIELD WASHER FLUID", "JAS WSSF"]
+  optional_items = ["INJECTOR CLEANER", "WINDSHIELD WASHER FLUID" ]
 
   for index, row in df.iterrows():
     item_servis = row["MODEL"]
