@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors)")
-st.write("Sila pilih model kenderaan dan servis tambahan pilihan anda di bawah:")
+st.write("Sila pilih model kenderaan dan komponen servis pilihan anda di bawah:")
 
 nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
 
@@ -11,7 +11,7 @@ if os.path.exists(nama_fail_excel):
     # Baca fail Excel dari Sheet pertama
     df = pd.read_excel(nama_fail_excel, sheet_name=0)
     
-    # Cari senarai model kenderaan (abaikan kolum bukan model)
+    # Cari senarai model kenderaan
     model_list = [col for col in df.columns if col not in ['MODEL', 'ADDITIONAL SERVICE', 'PRICE', 'Unnamed: 1', 'Unnamed: 2']]
     
     # 1. Pelanggan pilih model kereta
@@ -19,8 +19,11 @@ if os.path.exists(nama_fail_excel):
     
     total_harga = 0.0
     
-    # --- BAHAGIAN 1: SERVIS ASAS ---
-    st.subheader(f"📋 Senarai Basic Service untuk: {model_pilihan}")
+    # --- BAHAGIAN 1: SERVIS ASAS & PILIHAN ---
+    st.subheader(f"📋 Senarai Servis untuk: {model_pilihan}")
+    
+    # Senarai item yang kita tetapkan sebagai pilihan (boleh tolak / uncheck)
+    optional_items = ["INJECTOR CLEANER", "WINDSHIELD WASHER FLUID", "JAS WSSF"]
     
     for index, row in df.iterrows():
         item_servis = row['MODEL']
@@ -36,16 +39,23 @@ if os.path.exists(nama_fail_excel):
             if pd.notna(harga):
                 try:
                     harga_float = float(harga)
-                    st.write(f"- **{nama_bersih}**: RM {harga_float:.2f}")
-                    total_harga += harga_float
+                    
+                    # Jika item adalah dalam senarai optional, jadikan ia checkbox (lalai = tanda/pilih)
+                    if any(opt in nama_bersih.upper() for opt in optional_items):
+                        pilih_item = st.checkbox(f"{nama_bersih} (+RM {harga_float:.2f})", value=True, key=f"opt_item_{index}")
+                        if pilih_item:
+                            total_harga += harga_float
+                    else:
+                        # Servis wajib (Minyak, Oil Filter, Gasket, Labour) terus masuk dalam harga
+                        st.write(f"- **{nama_bersih}**: RM {harga_float:.2f}")
+                        total_harga += harga_float
+                        
                 except ValueError:
                     pass
 
     # --- BAHAGIAN 2: ADDITIONAL SERVICE (TAMBAHAN) ---
     st.subheader("🛠️ Servis Tambahan Pilihan (Optional)")
     
-    # Semak dan baca bahagian bawah Excel untuk kolum 'ADDITIONAL SERVICE'
-    # Kita cari baris bermula selepas senarai servis asas
     is_addon_section = False
     for index, row in df.iterrows():
         item_servis = str(row['MODEL']).strip()
@@ -56,7 +66,6 @@ if os.path.exists(nama_fail_excel):
             
         if is_addon_section and pd.notna(row['MODEL']) and row['MODEL'] != "":
             nama_addon = str(row['MODEL']).replace("*", "").strip()
-            # Harga untuk additional service biasanya berada di kolum seterusnya (kolum pertama selepas MODEL, iaitu kolum indeks 1 / 'MYVI AT')
             harga_addon = row[df.columns[1]] 
             
             if pd.notna(harga_addon) and str(harga_addon).strip() != "":
