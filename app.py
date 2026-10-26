@@ -30,11 +30,8 @@ if os.path.exists(nama_fail_excel):
 
   total_harga = 0.0
 
-  # --- BAHAGIAN 1: SERVIS ASAS & PILIHAN ---
-  st.subheader(f"📋 Senarai Servis untuk: {model_pilihan}")
-
-  # Senarai item optional (lalai = False / tidak dipilih, boleh tolak atau terima)
-  optional_items = ["INJECTOR CLEANER", "WINDSHIELD WASHER FLUID" ]
+  # --- BAHAGIAN 1: SERVIS ASAS ---
+  st.subheader(f"📋 Senarai Servis Asas untuk: {model_pilihan}")
 
   for index, row in df.iterrows():
     item_servis = row["MODEL"]
@@ -54,21 +51,8 @@ if os.path.exists(nama_fail_excel):
       if pd.notna(harga):
         try:
           harga_float = float(harga)
-
-          # Jika item optional, jadikan checkbox dengan nilai lalai False (tidak dipilih / boleh tolak)
-          if any(opt in nama_bersih.upper() for opt in optional_items):
-            pilih_item = st.checkbox(
-                f"{nama_bersih} (+RM {harga_float:.2f})",
-                value=False,
-                key=f"opt_item_{index}",
-            )
-            if pilih_item:
-              total_harga += harga_float
-          else:
-            # Servis wajib kekal dimasukkan terus
-            st.write(f"- **{nama_bersih}**: RM {harga_float:.2f}")
-            total_harga += harga_float
-
+          st.write(f"- **{nama_bersih}**: RM {harga_float:.2f}")
+          total_harga += harga_float
         except ValueError:
           pass
 
@@ -110,6 +94,9 @@ if os.path.exists(nama_fail_excel):
         "Sebut harga berjaya direkodkan! Sila tunjukkan skrin ini kepada"
         " Service Advisor."
     )
+
+else:
+  st.error(f"⚠️ Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
 
 else:
   st.error(f"⚠️ Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
