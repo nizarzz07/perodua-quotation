@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebut Harga Servis - Perodua Sarinani Motors</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        perodua: {
+                            red: '#D71921',
+                            reddark: '#B01017',
+                            black: '#111111',
+                            cardbg: '#FFFFFF',
+                            accent: '#1E1E1E'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F3F4F6;
+        }
+        .header-bg {
+            background: linear-gradient(180deg, #0A0A0A 0%, #171717 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+        }
+        /* Printable view styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            .print-container {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Navigation / Header Banner with Official Logos -->
+    <header class="header-bg text-white border-b-4 border-perodua-red sticky top-0 z-50 shadow-xl no-print">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- Dual Logo Container -->
+            <div class="flex items-center space-x-3 sm:space-x-5">
+                
+                <!-- 1. Perodua Official Emblem Badge -->
+                <div class="bg-black/80 px-3 py-1.5 rounded-xl border border-white/10 flex items-center shadow-md">
+                    <svg class="h-8 w-auto" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="100" cy="50" rx="90" ry="45" fill="url(#metalGrad)" stroke="#CCCCCC" stroke-width="4"/>
+                        <path d="M 30 50 C 35 20, 80 12, 115 28 C 75 25, 50 45, 38 68 Z" fill="#008837"/>
+                        <path d="M 170 50 C 165 80, 120 88, 85 72 C 125 75, 150 55, 162 32 Z" fill="#D71921"/>
+                        <path d="M 50 78 L 120 18 C 105 20, 90 32, 70 58 Z" fill="#EAEAEA"/>
+                        <text x="100" y="112" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="22" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">PERODUA</text>
+                        <defs>
+                            <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#E6E6E6"/>
+                                <stop offset="50%" stop-color="#999999"/>
+                                <stop offset="100%" stop-color="#4D4D4D"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="h-8 w-px bg-white/20 hidden sm:block"></div>
+
+                <!-- 2. Sarinani Motors Emblem Badge -->
+                <div class="flex items-center space-x-2 bg-black/80 px-3 py-1.5 rounded-xl border border-white/10 shadow-md">
+                    <!-- Red S Emblem -->
+                    <div class="w-8 h-8 rounded-full bg-perodua-red flex items-center justify-center font-black text-white text-lg tracking-tighter shadow-inner border border-white/20">
+                        <svg class="w-5 h-5 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="12">
+                            <path d="M75 30 C 75 15, 25 15, 25 40 C 25 65, 75 60, 75 80 C 75 95, 25 95, 25 80" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="block font-black text-sm tracking-wide text-white leading-none">SARINANI</span>
+                        <span class="block text-[9px] font-bold text-slate-300 tracking-widest uppercase">MOTORS SDN BHD</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Header Action Tabs -->
+            <div class="flex bg-slate-900/90 p-1 rounded-xl border border-white/10 text-xs font-semibold">
+                <button id="btn-app-tab" onclick="switchTab('app')" class="px-3.5 py-1.5 rounded-lg transition-all duration-200 bg-perodua-red text-white shadow">
+                    <i class="fa-solid fa-calculator mr-1.5"></i> Web App UI
+                </button>
+                <button id="btn-code-tab" onclick="switchTab('code')" class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition-all duration-200">
+                    <i class="fa-solid fa-code mr-1.5"></i> Streamlit Code (app.py)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6">
+
+        <!-- TAB 1: INTERACTIVE SEBUT HARGA WEB APP -->
+        <div id="tab-app-content" class="space-y-6">
+
+            <!-- Vehicle Selection Card -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-[11px] font-extrabold text-perodua-red uppercase tracking-widest flex items-center gap-1.5">
+                            <i class="fa-solid fa-car-side"></i> Langkah 1 daripada 2
+                        </span>
+                        <h2 class="text-xl font-bold text-slate-900 mt-0.5">Pilih Model Kenderaan Perodua Anda</h2>
+                        <p class="text-xs text-slate-500">Kadar sebut harga asas akan diperkemaskan mengikut spesifikasi model.</p>
+                    </div>
+
+                    <!-- Model Dropdown -->
+                    <div class="w-full md:w-80">
+                        <label for="car-model" class="block text-xs font-bold text-slate-700 uppercase mb-1">Model Kenderaan:</label>
+                        <div class="relative">
+                            <select id="car-model" onchange="calculateTotal()" class="w-full bg-slate-50 border-2 border-slate-300 text-slate-900 text-sm font-bold rounded-xl focus:ring-perodua-red focus:border-perodua-red block p-3 pr-10 appearance-none cursor-pointer shadow-sm transition-all">
+                                <option value="MYVI AT" selected>MYVI AT (1.3 / 1.5)</option>
+                                <option value="MYVI CVT">MYVI CVT (1.3 / 1.5)</option>
+                                <option value="BEZZA 1.0">BEZZA 1.0 AT/MT</option>
+                                <option value="BEZZA 1.3">BEZZA 1.3 AT/MT</option>
+                                <option value="AXIA NEW">AXIA BARU (DNGA)</option>
+                                <option value="ALZA NEW">ALZA BARU 1.5</option>
+                                <option value="ATIVA">ATIVA 1.0 TURBO</option>
+                                <option value="ARUZ">ARUZ 1.5</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-perodua-red">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Grid Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Items Breakdown -->
+                <div class="lg:col-span-7 space-y-6">
+
+                    <!-- Basic Mandatory Services Card -->
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden card-shadow">
+                        <div class="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b-2 border-perodua-red">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="bg-perodua-red text-white p-1.5 rounded-lg text-xs">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </span>
+                                <h3 class="font-bold text-base">Senarai Servis Asas (Basic Service)</h3>
+                            </div>
+                            <span class="text-xs bg-slate-800 text-slate-300 font-medium px-2.5 py-1 rounded-full border border-slate-700">Pakej Asas</span>
+                        </div>
+
+                        <div class="p-5 divide-y divide-slate-100">
+                            <!-- Minyak Engine -->
+                            <div class="py-3 flex items-center justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-perodua-red mt-1"><i class="fa-solid fa-circle-check text-base"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">MINYAK ENGINE</h4>
+                                        <p class="text-xs text-slate-500">Minyak enjin sintetik / semi-sintetik Perodua</p>
+                                    </div>
+                                </div>
+                                <span id="price-engine-oil" class="font-bold text-slate-900 text-sm">RM 161.10</span>
+                            </div>
+
+                            <!-- Oil Filter -->
+                            <div class="py-3 flex items-center justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-perodua-red mt-1"><i class="fa-solid fa-circle-check text-base"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">OIL FILTER</h4>
+                                        <p class="text-xs text-slate-500">Penapis minyak enjin original Perodua</p>
+                                    </div>
+                                </div>
+                                <span id="price-oil-filter" class="font-bold text-slate-900 text-sm">RM 12.50</span>
+                            </div>
+
+                            <!-- Gasket -->
+                            <div class="py-3 flex items-center justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-perodua-red mt-1"><i class="fa-solid fa-circle-check text-base"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">GASKET</h4>
+                                        <p class="text-xs text-slate-500">Washer takungan minyak hitam enjin</p>
+                                    </div>
+                                </div>
+                                <span id="price-gasket" class="font-bold text-slate-900 text-sm">RM 3.80</span>
+                            </div>
+
+                            <!-- Injector Cleaner -->
+                            <div class="py-3 flex items-center justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-perodua-red mt-1"><i class="fa-solid fa-circle-check text-base"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">INJECTOR CLEANER</h4>
+                                        <p class="text-xs text-slate-500">Cecair pencuci injector bahan api enjin</p>
+                                    </div>
+                                </div>
+                                <span id="price-injector" class="font-bold text-slate-900 text-sm">RM 27.00</span>
+                            </div>
+
+                            <!-- Windshield Washer Fluid -->
+                            <div class="py-3 flex items-center justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-perodua-red mt-1"><i class="fa-solid fa-circle-check text-base"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">WINDSHIELD WASHER FLUID</h4>
+                                        <p class="text-xs text-slate-500">Cecair pencuci cermin kenderaan</p>
+                                    </div>
+                                </div>
+                                <span id="price-washer" class="font-bold text-slate-900 text-sm">RM 2.00</span>
+                            </div>
+
+                            <!-- JAS WSSF (With Requested Specific Expander Text) -->
+                            <div class="py-3 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="text-perodua-red mt-1"><i class="fa-solid fa-circle-check text-base"></i></div>
+                                        <div>
+                                            <div class="flex items-center space-x-2">
+                                                <h4 class="font-bold text-slate-900 text-sm">JAS WSSF</h4>
+                                                <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold border">Regulasi</span>
+                                            </div>
+                                            <p class="text-xs text-slate-500">Caj pelupusan sisa & sanitasi bengkel</p>
+                                        </div>
+                                    </div>
+                                    <span id="price-jas" class="font-bold text-slate-900 text-sm">RM 10.80</span>
+                                </div>
+                                <!-- Interactive Accordion -->
+                                <details class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 transition-all cursor-pointer group">
+                                    <summary class="font-bold text-perodua-red flex items-center justify-between select-none">
+                                        <span><i class="fa-solid fa-circle-info mr-1.5"></i> Ketik untuk lihat penerangan: JAS WSSF</span>
+                                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="mt-2 text-slate-700 leading-relaxed border-t border-slate-200 pt-2 space-y-1.5">
+                                        <p>• <strong>JAS:</strong> Pelaksanaan Caj Pelupusan Sisa Berjadual (Environment Waste Fee) minimum sebanyak RM5.00.</p>
+                                        <p>• <strong>WSSF:</strong> Pelaksanaan Caj Bahan Consumable dan Sanitasi Bengkel.</p>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <!-- Labour Service -->
+                            <div class="py-3 flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-perodua-red mt-1"><i class="fa-solid fa-user-gear text-base"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">LABOUR SERVICE</h4>
+                                        <p class="text-xs text-slate-500">Upah kepakaran mekanik bertauliah Perodua</p>
+                                    </div>
+                                </div>
+                                <span id="price-labour" class="font-bold text-perodua-red text-sm">RM 65.88</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Services Card -->
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden card-shadow">
+                        <div class="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b-2 border-perodua-red">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="bg-perodua-red text-white p-1.5 rounded-lg text-xs">
+                                    <i class="fa-solid fa-sliders"></i>
+                                </span>
+                                <h3 class="font-bold text-base">Servis Tambahan Pilihan (Optional Add-ons)</h3>
+                            </div>
+                            <span class="text-xs bg-amber-500/20 text-amber-300 font-semibold px-2.5 py-1 rounded-full border border-amber-500/30">Servis Tambahan</span>
+                        </div>
+
+                        <div class="p-5 space-y-3.5">
+                            <!-- Alignment & Balancing -->
+                            <label class="flex items-start space-x-3.5 p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 cursor-pointer transition-all">
+                                <input type="checkbox" id="chk-alignment" value="59.40" onchange="calculateTotal()" class="mt-1 w-4 h-4 text-perodua-red rounded border-slate-300 focus:ring-perodua-red cursor-pointer">
+                                <div class="flex-grow">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-slate-900 text-sm">ALIGNMENT BALANCING</span>
+                                        <span class="font-bold text-perodua-red text-sm">+RM 59.40</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-0.5">Pelarasan sudut dan imbangan empat tayar kenderaan</p>
+                                </div>
+                            </label>
+
+                            <!-- Ozone Treatment (With requested Expander) -->
+                            <div class="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all space-y-2">
+                                <label class="flex items-start space-x-3.5 cursor-pointer">
+                                    <input type="checkbox" id="chk-ozone" value="56.83" onchange="calculateTotal()" class="mt-1 w-4 h-4 text-perodua-red rounded border-slate-300 focus:ring-perodua-red cursor-pointer">
+                                    <div class="flex-grow">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-bold text-slate-900 text-sm">OZONE TREATMENT</span>
+                                            <span class="font-bold text-perodua-red text-sm">+RM 56.83</span>
+                                        </div>
+                                        <p class="text-xs text-slate-500 mt-0.5">Sanitasi udara dan pembersihan kabin daripada kuman</p>
+                                    </div>
+                                </label>
+                                <!-- Expander for Ozone -->
+                                <details class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 transition-all cursor-pointer group ml-7">
+                                    <summary class="font-bold text-perodua-red flex items-center justify-between select-none">
+                                        <span><i class="fa-solid fa-circle-info mr-1.5"></i> Ketik untuk lihat penerangan: OZONE TREATMENT</span>
+                                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <p class="mt-2 text-slate-700 leading-relaxed border-t border-slate-200 pt-2">
+                                        Rawatan ozon untuk membunuh bakteria, kulat, dan menyahbau kurang menyenangkan di dalam kabin kereta.
+                                    </p>
+                                </details>
+                            </div>
+
+                            <!-- Car Wash -->
+                            <label class="flex items-start space-x-3.5 p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 cursor-pointer transition-all">
+                                <input type="checkbox" id="chk-wash" value="10.80" onchange="calculateTotal()" class="mt-1 w-4 h-4 text-perodua-red rounded border-slate-300 focus:ring-perodua-red cursor-pointer">
+                                <div class="flex-grow">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-slate-900 text-sm">CAR WASH</span>
+                                        <span class="font-bold text-perodua-red text-sm">+RM 10.80</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-0.5">Mencuci dan mengelap permukaan luar kenderaan</p>
+                                </div>
+                            </label>
+
+                            <!-- Throttle Body -->
+                            <label class="flex items-start space-x-3.5 p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 cursor-pointer transition-all">
+                                <input type="checkbox" id="chk-throttle" value="42.20" onchange="calculateTotal()" class="mt-1 w-4 h-4 text-perodua-red rounded border-slate-300 focus:ring-perodua-red cursor-pointer">
+                                <div class="flex-grow">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-slate-900 text-sm">SERVIS CUCI THROTTLE BODY</span>
+                                        <span class="font-bold text-perodua-red text-sm">+RM 42.20</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-0.5">Servis cuci komponen Throttle Body melancarkan angin ke enjin</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Summary Card -->
+                <div class="lg:col-span-5">
+                    <div class="sticky top-20 bg-slate-900 text-white rounded-2xl border-2 border-slate-800 card-shadow overflow-hidden">
+                        
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-perodua-red to-perodua-reddark px-5 py-4 flex items-center justify-between">
+                            <div>
+                                <h3 class="font-black text-base tracking-wide uppercase">Anggaran Sebut Harga</h3>
+                                <p class="text-xs text-red-100 font-medium">Sarinani Motors Sdn Bhd</p>
+                            </div>
+                            <div class="bg-white/10 p-2 rounded-xl backdrop-blur-sm border border-white/20">
+                                <i class="fa-solid fa-file-invoice-dollar text-xl text-white"></i>
+                            </div>
+                        </div>
+
+                        <!-- Summary Content -->
+                        <div class="p-5 space-y-4">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                                <span class="text-xs text-slate-400 font-medium">Model Kereta:</span>
+                                <span id="summary-car-model" class="font-black text-white text-sm bg-slate-800 px-3 py-1 rounded-lg border border-slate-700">MYVI AT</span>
+                            </div>
+
+                            <div class="space-y-2 text-xs text-slate-300">
+                                <div class="flex justify-between">
+                                    <span>Pakej Servis Asas:</span>
+                                    <span id="sum-basic-price" class="font-bold text-white">RM 283.08</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Servis Tambahan (Add-ons):</span>
+                                    <span id="sum-addon-price" class="font-bold text-amber-400">RM 0.00</span>
+                                </div>
+                                <div class="flex justify-between text-[11px] text-slate-400">
+                                    <span>Caj SST & Sanitasi:</span>
+                                    <span>Termasuk dalam harga</span>
+                                </div>
+                            </div>
+
+                            <!-- Grand Total Red Box -->
+                            <div class="bg-gradient-to-br from-perodua-red to-perodua-reddark p-4 rounded-xl text-center shadow-lg relative overflow-hidden">
+                                <div class="absolute -right-4 -bottom-4 opacity-15 text-white pointer-events-none">
+                                    <i class="fa-solid fa-car text-8xl"></i>
+                                </div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-red-100 block mb-1">Anggaran Jumlah Keseluruhan (Grand Total)</span>
+                                <div class="text-3xl font-black text-white tracking-tight">
+                                    <span>RM </span><span id="grand-total-display">283.08</span>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="space-y-2.5 pt-2">
+                                <button onclick="sendWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg hover:shadow-emerald-900/30 transition-all">
+                                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                                    <span>Hantar ke WhatsApp SA</span>
+                                </button>
+                                <button onclick="window.print()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center space-x-2 border border-slate-700 transition-all">
+                                    <i class="fa-solid fa-print"></i>
+                                    <span>Cetak Sebut Harga</span>
+                                </button>
+                            </div>
+
+                            <p class="text-[11px] text-slate-400 text-center leading-tight pt-2 border-t border-slate-800">
+                                Sila kemukakan sebut harga ini kepada Service Advisor semasa pendaftaran kenderaan.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: STREAMLIT CODE VIEWER -->
+        <div id="tab-code-content" class="hidden space-y-4">
+            <div class="bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 card-shadow">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+                    <div>
+                        <span class="bg-perodua-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Kemaskini GitHub / PC</span>
+                        <h2 class="text-xl font-bold mt-1">Kod `app.py` Streamlit Rasmi</h2>
+                        <p class="text-xs text-slate-400">Salin kod di bawah dan gantikan isi fail <code class="text-amber-300 font-mono">app.py</code> anda di PC.</p>
+                    </div>
+                    <button onclick="copyStreamlitCode()" class="bg-perodua-red hover:bg-perodua-reddark text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-copy"></i>
+                        <span id="copy-btn-text">Salin Semua Kod Python</span>
+                    </button>
+                </div>
+
+                <div class="mt-4">
+                    <pre class="bg-slate-950 text-slate-200 text-xs p-4 rounded-xl overflow-x-auto border border-slate-800 font-mono leading-relaxed max-h-[600px] overflow-y-auto" id="python-code-block"><code>import os
+import pandas as pd
+import streamlit as st
+
+# Konfigurasi Halaman Streamlit
+st.set_page_config(
+    page_title="Sebut Harga Servis - Perodua Sarinani Motors",
+    page_icon="🚗",
+    layout="centered"
+)
+
+# Custom Styling (Merah #D71921 & Hitam #111111)
+st.markdown("""
+<style>
+    .main { background-color: #F8F9FA; }
+    h1 { color: #111111; font-weight: 800; }
+    .stButton>button {
+        background-color: #D71921;
+        color: white;
+        font-weight: bold;
+        border-radius: 10px;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        width: 100%;
+    }
+    .stButton>button:hover { background-color: #B01017; color: white; }
+    .stSuccess {
+        background-color: #111111;
+        color: #FFFFFF;
+        border-left: 5px solid #D71921;
+        padding: 1rem;
+        border-radius: 10px;
+    }
+</style>
+""", unsafe_allow_javascript=True)
+
+# Tajuk Aplikasi & Subtitle
+st.title("🚗 Perodua Sarinani Motors Sdn Bhd")
+st.write("Sila pilih model kenderaan dan komponen servis pilihan anda di bawah:")
+
+nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
+
+if os.path.exists(nama_fail_excel):
+    df = pd.read_excel(nama_fail_excel, sheet_name=0)
+
+    # Cari senarai model kenderaan
+    model_list = [
+        col for col in df.columns
+        if col not in ["MODEL", "ADDITIONAL SERVICE", "PRICE", "Unnamed: 1", "Unnamed: 2"]
+    ]
+
+    # 1. Pelanggan pilih model kereta
+    model_pilihan = st.selectbox("Pilih Model Kenderaan Anda:", model_list)
+
+    total_harga = 0.0
+
+    # --- BAHAGIAN 1: SERVIS ASAS ---
+    st.subheader(f"📋 Senarai Servis Asas untuk: {model_pilihan}")
+
+    for index, row in df.iterrows():
+        item_servis = row["MODEL"]
+
+        if (
+            pd.isna(item_servis)
+            or str(item_servis).strip() == ""
+            or "ADDITIONAL" in str(item_servis).upper()
+        ):
+            break
+
+        harga = row[model_pilihan]
+        nama_bersih = str(item_servis).replace("*", "").strip()
+
+        if nama_bersih.upper() != "SUBTOTAL":
+            if pd.notna(harga):
+                try:
+                    harga_float = float(harga)
+                    total_harga += harga_float
+
+                    col1, col2 = st.columns([3, 1])
+                    with col1:
+                        st.write(f"• **{nama_bersih}**")
+                    with col2:
+                        st.write(f"**RM {harga_float:.2f}**")
+
+                    # Expander khusus untuk JAS WSSF
+                    if "JAS WSSF" in nama_bersih.upper():
+                        with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
+                            st.write(
+                                "• **JAS:** Pelaksanaan Caj Pelupusan Sisa Berjadual"
+                                " (Environment Waste Fee) minimum sebanyak RM5.00.\n"
+                                "• **WSSF:** Pelaksanaan Caj Bahan Consumable dan Sanitasi Bengkel."
+                            )
+
+                except ValueError:
+                    pass
+
+    # --- BAHAGIAN 2: ADDITIONAL SERVICE (TAMBAHAN) ---
+    st.subheader("🛠️ Servis Tambahan Pilihan (Optional)")
+
+    is_addon_section = False
+    for index, row in df.iterrows():
+        item_servis = str(row["MODEL"]).strip()
+
+        if "ADDITIONAL" in item_servis.upper():
+            is_addon_section = True
+            continue
+
+        if is_addon_section and pd.notna(row["MODEL"]) and row["MODEL"] != "":
+            nama_addon = str(row["MODEL"]).replace("*", "").strip()
+            harga_addon = row[df.columns[1]]
+
+            if pd.notna(harga_addon) and str(harga_addon).strip() != "":
+                try:
+                    harga_addon_float = float(harga_addon)
+
+                    pilih = st.checkbox(
+                        f"Tambah **{nama_addon}** (+RM {harga_addon_float:.2f})",
+                        key=f"addon_row_{index}",
+                    )
+                    if pilih:
+                        total_harga += harga_addon_float
+
+                    # Expander khusus untuk OZONE TREATMENT
+                    if "OZONE" in nama_addon.upper():
+                        with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
+                            st.write(
+                                "Rawatan ozon untuk membunuh bakteria, kulat, dan menyahbau"
+                                " kurang menyenangkan di dalam kabin kereta."
+                            )
+
+                except ValueError:
+                    pass
+
+    # 3. Paparan Jumlah Keseluruhan
+    st.markdown("---")
+    st.subheader("💰 Anggaran Jumlah Keseluruhan (Grand Total)")
+    st.success(f"**RM {total_harga:.2f}**")
+
+    if st.button("Cetak / Sahkan Sebut Harga"):
+        st.balloons()
+        st.info(
+            "Sebut harga berjaya direkodkan! Sila tunjukkan skrin ini kepada"
+            " Service Advisor Perodua Sarinani Motors."
+        )
+
+else:
+    st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-5 border-t border-slate-800 no-print mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-1">
+            <p class="font-bold text-slate-300">&copy; 2026 Perodua Sarinani Motors Sdn Bhd. Hak Cipta Terpelihara.</p>
+            <p class="text-slate-500 text-[11px]">Pusat Servis & Alat Ganti Rasmi Perodua.</p>
+        </div>
+    </footer>
+
+    <!-- Script Calculation & UI Switcher -->
+    <script>
+        const basePrices = {
+            "MYVI AT": { basic: 283.08, engineOil: 161.10, oilFilter: 12.50, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 65.88 },
+            "MYVI CVT": { basic: 295.40, engineOil: 172.00, oilFilter: 13.50, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 66.30 },
+            "BEZZA 1.0": { basic: 245.50, engineOil: 135.00, oilFilter: 12.50, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 54.40 },
+            "BEZZA 1.3": { basic: 278.00, engineOil: 158.00, oilFilter: 12.50, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 63.90 },
+            "AXIA NEW": { basic: 250.20, engineOil: 140.00, oilFilter: 12.50, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 54.10 },
+            "ALZA NEW": { basic: 318.50, engineOil: 185.00, oilFilter: 14.00, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 75.90 },
+            "ATIVA": { basic: 325.00, engineOil: 190.00, oilFilter: 15.00, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 76.40 },
+            "ARUZ": { basic: 335.80, engineOil: 198.00, oilFilter: 15.50, gasket: 3.80, injector: 27.00, washer: 2.00, jas: 10.80, labour: 78.70 }
+        };
+
+        function calculateTotal() {
+            const selectedModel = document.getElementById('car-model').value;
+            const modelData = basePrices[selectedModel] || basePrices["MYVI AT"];
+
+            document.getElementById('price-engine-oil').innerText = `RM ${modelData.engineOil.toFixed(2)}`;
+            document.getElementById('price-oil-filter').innerText = `RM ${modelData.oilFilter.toFixed(2)}`;
+            document.getElementById('price-gasket').innerText = `RM ${modelData.gasket.toFixed(2)}`;
+            document.getElementById('price-injector').innerText = `RM ${modelData.injector.toFixed(2)}`;
+            document.getElementById('price-washer').innerText = `RM ${modelData.washer.toFixed(2)}`;
+            document.getElementById('price-jas').innerText = `RM ${modelData.jas.toFixed(2)}`;
+            document.getElementById('price-labour').innerText = `RM ${modelData.labour.toFixed(2)}`;
+
+            const basicTotal = modelData.basic;
+            document.getElementById('sum-basic-price').innerText = `RM ${basicTotal.toFixed(2)}`;
+            document.getElementById('summary-car-model').innerText = selectedModel;
+
+            let addonTotal = 0;
+            if (document.getElementById('chk-alignment').checked) addonTotal += parseFloat(document.getElementById('chk-alignment').value);
+            if (document.getElementById('chk-ozone').checked) addonTotal += parseFloat(document.getElementById('chk-ozone').value);
+            if (document.getElementById('chk-wash').checked) addonTotal += parseFloat(document.getElementById('chk-wash').value);
+            if (document.getElementById('chk-throttle').checked) addonTotal += parseFloat(document.getElementById('chk-throttle').value);
+
+            document.getElementById('sum-addon-price').innerText = `RM ${addonTotal.toFixed(2)}`;
+
+            const grandTotal = basicTotal + addonTotal;
+            document.getElementById('grand-total-display').innerText = grandTotal.toFixed(2);
+        }
+
+        function sendWhatsApp() {
+            const model = document.getElementById('car-model').value;
+            const total = document.getElementById('grand-total-display').innerText;
+            
+            let selectedAddons = [];
+            if (document.getElementById('chk-alignment').checked) selectedAddons.push("Alignment & Balancing");
+            if (document.getElementById('chk-ozone').checked) selectedAddons.push("Ozone Treatment");
+            if (document.getElementById('chk-wash').checked) selectedAddons.push("Car Wash");
+            if (document.getElementById('chk-throttle').checked) selectedAddons.push("Cuci Throttle Body");
+
+            let addonText = selectedAddons.length > 0 ? selectedAddons.join(", ") : "Tiada Add-on";
+
+            const message = `Salam Service Advisor Perodua Sarinani Motors Sdn Bhd,%0A%0ASaya ingin mengesahkan Sebut Harga Servis berikut:%0A• *Model:* ${model}%0A• *Servis Asas:* Termasuk%0A• *Servis Tambahan:* ${addonText}%0A• *Anggaran Jumlah:* RM ${total}%0A%0AMohon maklum balas tempahan slot. Terima kasih!`;
+            
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        }
+
+        function switchTab(tab) {
+            const appContent = document.getElementById('tab-app-content');
+            const codeContent = document.getElementById('tab-code-content');
+            const btnApp = document.getElementById('btn-app-tab');
+            const btnCode = document.getElementById('btn-code-tab');
+
+            if (tab === 'app') {
+                appContent.classList.remove('hidden');
+                codeContent.classList.add('hidden');
+                btnApp.className = "px-3.5 py-1.5 rounded-lg transition-all duration-200 bg-perodua-red text-white shadow";
+                btnCode.className = "px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition-all duration-200";
+            } else {
+                appContent.classList.add('hidden');
+                codeContent.classList.remove('hidden');
+                btnCode.className = "px-3.5 py-1.5 rounded-lg transition-all duration-200 bg-perodua-red text-white shadow";
+                btnApp.className = "px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition-all duration-200";
+            }
+        }
+
+        function copyStreamlitCode() {
+            const codeText = document.getElementById('python-code-block').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btnText = document.getElementById('copy-btn-text');
+                btnText.innerText = "Berjaya Disalin!";
+                setTimeout(() => {
+                    btnText.innerText = "Salin Semua Kod Python";
+                }, 2000);
+            });
+        }
+
+        window.onload = function() {
+            calculateTotal();
+        };
+    </script>
+</body>
+</html>
