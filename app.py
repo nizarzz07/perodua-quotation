@@ -201,7 +201,11 @@ if os.path.exists(nama_fail_excel):
       continue
 
     if is_addon_section and pd.notna(row["MODEL"]) and row["MODEL"] != "":
-      nama_addon = str(row["MODEL"]).replace("*", "").strip()..replace("*", "").strip() if pd.notna(row["MODEL"]) else ""
+      nama_addon = (
+          str(row["MODEL"]).replace("*", "").strip()
+          if pd.notna(row["MODEL"])
+          else ""
+      )
       harga_addon = row[df.columns[1]]
 
       if pd.notna(harga_addon) and str(harga_addon).strip() != "":
