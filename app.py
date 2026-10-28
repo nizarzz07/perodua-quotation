@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# 2. Hiasan Muka Depan (Interface CSS & HTML - Tema Putih & Hitam)
+# 2. Hiasan CSS Utama (Tema Putih & Hitam)
 st.markdown(
     """
     <style>
@@ -26,6 +26,7 @@ st.markdown(
             padding: 25px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 15px;
             margin-bottom: 25px;
         }
         
@@ -82,7 +83,19 @@ st.markdown(
             color: #1a1a1a;
         }
     </style>
-    
+    """,
+    unsafe_allow_html=True,
+)
+
+# 3. PAPARAN LOGO RASMI DI ATAS SEKALI
+if os.path.exists("sarinani_motors_logo.png"):
+  st.image("sarinani_motors_logo.png", use_container_width=True)
+elif os.path.exists("Perodua-Logo.png"):
+  st.image("Perodua-Logo.png", use_container_width=True)
+
+# 4. KOTAK TAJUK DI BAWAH LOGO
+st.markdown(
+    """
     <div class="perodua-header-card">
         <h1>Sistem Pilihan Servis Kenderaan</h1>
         <p>Perodua Sarinani Motors Sdn Bhd • Rasmi & Profesional</p>
@@ -90,12 +103,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-# 3. Paparan Logo Rasmi
-if os.path.exists("sarinani_motors_logo.png"):
-  st.image("sarinani_motors_logo.png", use_container_width=True)
-elif os.path.exists("Perodua-Logo.png"):
-  st.image("Perodua-Logo.png", use_container_width=True)
 
 nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
 
@@ -208,7 +215,6 @@ if os.path.exists(nama_fail_excel):
       unsafe_allow_html=True,
   )
 
-  # Tambah jarak kosong (*vertical space*) menggunakan st.markdown
   st.markdown("<br>", unsafe_allow_html=True)
 
   pesanan_wa = (
@@ -218,7 +224,6 @@ if os.path.exists(nama_fail_excel):
   )
   pautan_wa = f"https://wa.me/?text={pesanan_wa}"
 
-  # Butang WhatsApp dengan jarak yang lebih selesa
   st.markdown(
       f"""
       <a href="{pautan_wa}" target="_blank" style="text-decoration:none;">
@@ -231,4 +236,4 @@ if os.path.exists(nama_fail_excel):
   )
 
 else:
-  st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
+  st
