@@ -124,4 +124,3 @@ if os.path.exists(nama_fail_excel):
 
 else:
   st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
-  st.error(f>⚠️ Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
