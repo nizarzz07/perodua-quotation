@@ -9,29 +9,36 @@ st.set_page_config(
     layout="centered",
 )
 
-# 2. Hiasan CSS Utama (Tema Putih & Hitam Sepenuhnya)
+# 2. CSS Kustom untuk Paksa Cerah (Light Mode) Termasuk Kotak Dropdown
 st.markdown(
     """
     <style>
+        /* Tetapan latar belakang utama */
         .stApp {
-            background-color: #FFFFFF;
-            color: #1a1a1a;
+            background-color: #FFFFFF !important;
+            color: #1a1a1a !important;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        /* Paksa kotak pilihan (selectbox) jadi cerah */
-        .stSelectbox div[data-baseweb="select"] > div {
+        /* Paksa kotak selectbox jadi cerah */
+        div[data-baseweb="select"] > div {
             background-color: #f9f9f9 !important;
             color: #1a1a1a !important;
             border: 1px solid #ccc !important;
         }
-        
-        /* Warna teks dalam dropdown pilihan */
-        div[data-baseweb="popover"] div {
+
+        /* Paksa senarai pilihan (dropdown menu) jadi cerah */
+        div[data-baseweb="popover"] div, ul[data-baseweb="menu"] {
             background-color: #FFFFFF !important;
             color: #1a1a1a !important;
         }
 
+        /* Warna teks pilihan di dalam senarai dropdown */
+        li[data-baseweb="option"] div {
+            color: #1a1a1a !important;
+        }
+
+        /* Kotak Tajuk Header */
         .perodua-header-card {
             background: linear-gradient(135deg, #f9f9f9 0%, #f1f1f1 100%);
             border: 2px solid #D71921;
@@ -194,7 +201,7 @@ if os.path.exists(nama_fail_excel):
       continue
 
     if is_addon_section and pd.notna(row["MODEL"]) and row["MODEL"] != "":
-      nama_addon = str(row["MODEL"]).replace("*", "").strip()
+      nama_addon = str(row["MODEL"]).replace("*", "").strip()..replace("*", "").strip() if pd.notna(row["MODEL"]) else ""
       harga_addon = row[df.columns[1]]
 
       if pd.notna(harga_addon) and str(harga_addon).strip() != "":
