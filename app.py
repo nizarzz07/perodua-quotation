@@ -2,28 +2,108 @@ import os
 import pandas as pd
 import streamlit as st
 
+# 1. Tetapan Halaman
 st.set_page_config(
     page_title="Perodua Sarinani Motors - Quotation",
     page_icon="🚗",
     layout="centered",
 )
 
-# Guna nama fail logo sebenar yang ada dalam GitHub anda
+# 2. Hiasan Muka Depan (Interface CSS & HTML Template)
+st.markdown(
+    """
+    <style>
+        /* Tetapan latar belakang utama */
+        .stApp {
+            background-color: #121212;
+            color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Kotak Hiasan Tema Hitam-Merah */
+        .perodua-header-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2b0d0e 100%);
+            border: 2px solid #D71921;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(215, 25, 33, 0.3);
+            margin-bottom: 25px;
+        }
+        
+        .perodua-header-card h1 {
+            color: #D71921;
+            font-size: 24px;
+            margin: 10px 0 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .perodua-header-card p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Seksyen Tajuk Kecil */
+        .section-heading {
+            font-size: 18px;
+            color: #D71921;
+            border-bottom: 2px solid #D71921;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* Kad Jumlah Keseluruhan (Grand Total) */
+        .grand-total-box {
+            background: linear-gradient(135deg, #2a080a 0%, #1a1a1a 100%);
+            border: 2px solid #D71921;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(215, 25, 33, 0.4);
+        }
+        
+        .grand-total-title {
+            color: #aaaaaa;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        
+        .grand-total-price {
+            font-size: 32px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+    
+    <div class="perodua-header-card">
+        <h1>Sistem Pilihan Servis Kenderaan</h1>
+        <p>Perodua Sarinani Motors Sdn Bhd • Rasmi & Profesional</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# 3. Paparan Logo Rasmi
 if os.path.exists("sarinani_motors_logo.png"):
   st.image("sarinani_motors_logo.png", use_container_width=True)
 elif os.path.exists("Perodua-Logo.png"):
   st.image("Perodua-Logo.png", use_container_width=True)
 
-st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors)")
-st.write(
-    "Sila pilih model kenderaan dan komponen servis pilihan anda di bawah:"
-)
-
 nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
 
 if os.path.exists(nama_fail_excel):
+  # Baca fail Excel dari Sheet pertama
   df = pd.read_excel(nama_fail_excel, sheet_name=0)
 
+  # Cari senarai model kenderaan
   model_list = [
       col
       for col in df.columns
@@ -37,10 +117,16 @@ if os.path.exists(nama_fail_excel):
       ]
   ]
 
+  # Pilihan Model Kenderaan
   model_pilihan = st.selectbox("Pilih Model Kenderaan Anda:", model_list)
+
   total_harga = 0.0
 
-  st.subheader(f"📋 Senarai Servis Asas untuk: {model_pilihan}")
+  # --- BAHAGIAN 1: SERVIS ASAS ---
+  st.markdown(
+      '<div class="section-heading">📋 Senarai Servis Asas</div>',
+      unsafe_allow_html=True,
+  )
 
   for index, row in df.iterrows():
     item_servis = row["MODEL"]
@@ -67,6 +153,7 @@ if os.path.exists(nama_fail_excel):
           with col2:
             st.write(f"**RM {harga_float:.2f}**")
 
+          # Penerangan khas JAS WSSF
           if "JAS WSSF" in nama_bersih.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
               st.write(
@@ -79,7 +166,11 @@ if os.path.exists(nama_fail_excel):
         except ValueError:
           pass
 
-  st.subheader("🛠️ Servis Tambahan Pilihan (Optional)")
+  # --- BAHAGIAN 2: SERVIS TAMBAHAN (ADDITIONAL) ---
+  st.markdown(
+      '<div class="section-heading">🛠️ Servis Tambahan Pilihan (Optional)</div>',
+      unsafe_allow_html=True,
+  )
 
   is_addon_section = False
   for index, row in df.iterrows():
@@ -104,6 +195,7 @@ if os.path.exists(nama_fail_excel):
           if pilih:
             total_harga += harga_addon_float
 
+          # Penerangan khas OZONE TREATMENT
           if "OZONE" in nama_addon.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
               st.write(
@@ -114,15 +206,44 @@ if os.path.exists(nama_fail_excel):
         except ValueError:
           pass
 
-  st.markdown("---")
-  st.subheader("💰 Anggaran Jumlah Keseluruhan (Grand Total)")
-  st.success(f"**RM {total_harga:.2f}**")
+  # --- BAHAGIAN 3: KOTAK JUMLAH KESELURUHAN (GRAND TOTAL) ---
+  st.markdown(
+      f"""
+      <div class="grand-total-box">
+          <div class="grand-total-title">ANGGARAN KESELURUHAN (GRAND TOTAL)</div>
+          <div class="grand-total-price">RM {total_harga:.2f}</div>
+      </div>
+      """,
+      unsafe_allow_html=True,
+  )
 
-  if st.button("Cetak / Sahkan Sebut Harga"):
-    st.balloons()
-    st.info(
-        "Sebut harga berjaya direkodkan! Sila tunjukkan skrin ini kepada"
-        " Service Advisor."
+  # Butang Tindakan (WhatsApp & Cetak)
+  pesanan_wa = (
+      f"Hai Service Advisor Sarinani Motors,%0ASaya berminat dengan sebut"
+      f" harga bagi model *{model_pilihan}*%0AAnggaran Jumlah:"
+      f" *RM {total_harga:.2f}*%0AMohon sahkan slot temujanji servis saya."
+  )
+  pautan_wa = f"https://wa.me/?text={pesanan_wa}"
+
+  col_btn1, col_btn2 = st.columns(2)
+  with col_btn1:
+    if st.button("🎈 Sahkan Sebut Harga", use_container_width=True):
+      st.balloons()
+      st.info(
+          "Sebut harga berjaya direkodkan! Sila tunjukkan skrin ini kepada"
+          " Service Advisor."
+      )
+
+  with col_btn2:
+    st.markdown(
+        f"""
+        <a href="{pautan_wa}" target="_blank" style="text-decoration:none;">
+            <div style="background-color:#25D366; color:white; padding:10px; border-radius:8px; text-align:center; font-weight:bold; margin-top:2px;">
+                📱 Hantar ke WhatsApp SA
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
     )
 
 else:
