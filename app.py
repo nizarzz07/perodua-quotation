@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# Kamus Terjemahan untuk 3 Bahasa (Slot Masa Jam 9 hingga 3)
+# Kamus Terjemahan untuk 3 Bahasa (Slot Masa Setiap Setengah Jam dari 9 Pagi - 4 Petang)
 translations = {
     "Malay": {
         "title": "Sistem Pilihan Servis Kenderaan",
@@ -49,12 +49,20 @@ translations = {
         ),
         "times": [
             "09:00 Pagi",
+            "09:30 Pagi",
             "10:00 Pagi",
+            "10:30 Pagi",
             "11:00 Pagi",
+            "11:30 Pagi",
             "12:00 Tengah Hari",
+            "12:30 Tengah Hari",
             "01:00 Petang",
+            "01:30 Petang",
             "02:00 Petang",
+            "02:30 Petang",
             "03:00 Petang",
+            "03:30 Petang",
+            "04:00 Petang",
         ],
         "day_names": [
             "Isnin",
@@ -105,12 +113,20 @@ translations = {
         ),
         "times": [
             "09:00 AM",
+            "09:30 AM",
             "10:00 AM",
+            "10:30 AM",
             "11:00 AM",
+            "11:30 AM",
             "12:00 PM",
+            "12:30 PM",
             "01:00 PM",
+            "01:30 PM",
             "02:00 PM",
+            "02:30 PM",
             "03:00 PM",
+            "03:30 PM",
+            "04:00 PM",
         ],
         "day_names": [
             "Monday",
@@ -152,12 +168,20 @@ translations = {
         "ozone_desc": "臭氧杀菌处理，可杀灭细菌、真菌并消除车厢内的异味。",
         "times": [
             "上午 09:00",
+            "上午 09:30",
             "上午 10:00",
+            "上午 10:30",
             "上午 11:00",
+            "上午 11:30",
             "中午 12:00",
+            "中午 12:30",
             "下午 01:00",
+            "下午 01:30",
             "下午 02:00",
+            "下午 02:30",
             "下午 03:00",
+            "下午 03:30",
+            "下午 04:00",
         ],
         "day_names": [
             "星期一",
