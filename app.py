@@ -2,16 +2,17 @@ import os
 import pandas as pd
 import streamlit as st
 
-# Set Konfigurasi Halaman (Tajuk Pelayar & Susunan)
 st.set_page_config(
     page_title="Perodua Sarinani Motors - Quotation",
     page_icon="🚗",
     layout="centered",
 )
 
-# Papar Logo jika fail logo.png wujud di dalam folder
-if os.path.exists("logo.png"):
-  st.image("logo.png", use_container_width=True)
+# Guna nama fail logo sebenar yang ada dalam GitHub anda
+if os.path.exists("sarinani_motors_logo.png"):
+  st.image("sarinani_motors_logo.png", use_container_width=True)
+elif os.path.exists("Perodua-Logo.png"):
+  st.image("Perodua-Logo.png", use_container_width=True)
 
 st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors)")
 st.write(
@@ -21,10 +22,8 @@ st.write(
 nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
 
 if os.path.exists(nama_fail_excel):
-  # Baca fail Excel dari Sheet pertama
   df = pd.read_excel(nama_fail_excel, sheet_name=0)
 
-  # Cari senarai model kenderaan
   model_list = [
       col
       for col in df.columns
@@ -38,12 +37,9 @@ if os.path.exists(nama_fail_excel):
       ]
   ]
 
-  # 1. Pelanggan pilih model kereta
   model_pilihan = st.selectbox("Pilih Model Kenderaan Anda:", model_list)
-
   total_harga = 0.0
 
-  # --- BAHAGIAN 1: SERVIS ASAS ---
   st.subheader(f"📋 Senarai Servis Asas untuk: {model_pilihan}")
 
   for index, row in df.iterrows():
@@ -71,7 +67,6 @@ if os.path.exists(nama_fail_excel):
           with col2:
             st.write(f"**RM {harga_float:.2f}**")
 
-          # Penerangan khas HANYA jika item adalah JAS WSSF
           if "JAS WSSF" in nama_bersih.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
               st.write(
@@ -84,7 +79,6 @@ if os.path.exists(nama_fail_excel):
         except ValueError:
           pass
 
-  # --- BAHAGIAN 2: ADDITIONAL SERVICE (TAMBAHAN) ---
   st.subheader("🛠️ Servis Tambahan Pilihan (Optional)")
 
   is_addon_section = False
@@ -110,7 +104,6 @@ if os.path.exists(nama_fail_excel):
           if pilih:
             total_harga += harga_addon_float
 
-          # Penerangan khas HANYA jika item adalah OZONE TREATMENT
           if "OZONE" in nama_addon.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
               st.write(
@@ -121,7 +114,6 @@ if os.path.exists(nama_fail_excel):
         except ValueError:
           pass
 
-  # 3. Paparan Jumlah Keseluruhan
   st.markdown("---")
   st.subheader("💰 Anggaran Jumlah Keseluruhan (Grand Total)")
   st.success(f"**RM {total_harga:.2f}**")
