@@ -2,6 +2,17 @@ import os
 import pandas as pd
 import streamlit as st
 
+# Set Konfigurasi Halaman (Tajuk Pelayar & Susunan)
+st.set_page_config(
+    page_title="Perodua Sarinani Motors - Quotation",
+    page_icon="🚗",
+    layout="centered",
+)
+
+# Papar Logo jika fail logo.png wujud di dalam folder
+if os.path.exists("logo.png"):
+  st.image("logo.png", use_container_width=True)
+
 st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors)")
 st.write(
     "Sila pilih model kenderaan dan komponen servis pilihan anda di bawah:"
@@ -60,7 +71,7 @@ if os.path.exists(nama_fail_excel):
           with col2:
             st.write(f"**RM {harga_float:.2f}**")
 
-          # Penerangan khas untuk JAS WSSF
+          # Penerangan khas HANYA jika item adalah JAS WSSF
           if "JAS WSSF" in nama_bersih.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
               st.write(
@@ -99,7 +110,7 @@ if os.path.exists(nama_fail_excel):
           if pilih:
             total_harga += harga_addon_float
 
-          # Penerangan khas untuk OZONE TREATMENT
+          # Penerangan khas HANYA jika item adalah OZONE TREATMENT
           if "OZONE" in nama_addon.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
               st.write(
