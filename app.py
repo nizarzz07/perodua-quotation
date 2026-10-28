@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import streamlit as st
 
-st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors Bukit Mertajam)")
+st.title("🚗 Sistem Pilihan Servis Kenderaan (Perodua Sarinani Motors)")
 st.write(
     "Sila pilih model kenderaan dan komponen servis pilihan anda di bawah:"
 )
@@ -32,58 +32,6 @@ if os.path.exists(nama_fail_excel):
 
   total_harga = 0.0
 
-  # Fungsi kecil untuk beri penerangan ringkas bagi setiap servis
-  def dapatkan_penerangan(nama_item):
-    nama = nama_item.upper()
-    if "MINYAK ENGINE" in nama:
-      return (
-          "Minyak enjin berkualiti tinggi untuk melindungi enjin, melancarkan"
-          " pergerakan komponen, dan menjaga prestasi pemanduan."
-      )
-    elif "OIL FILTER" in nama:
-      return (
-          "Menapis kotoran dan serpihan halus daripada minyak enjin supaya"
-          " enjin sentiasa bersih dan tahan lama."
-      )
-    elif "GASKET" in nama:
-      return (
-          "Getah penutup skru minyak hitam untuk mengelakkan berlakunya"
-          " sebarang kebocoran minyak."
-      )
-    elif "INJECTOR CLEANER" in nama:
-      return (
-          "Cecair pencuci khas untuk membersihkan sistem injektor bahan api,"
-          " menjimatkan minyak,mencuci carbon deposit dalam enjin dan melancarkan pecutan."
-      )
-    elif "WINDSHIELD WASHER" in nama:
-      return (
-          "Cecair pencuci cermin kereta untuk memastikan pandangan lebih jelas"
-          " dan membuang kesan degil pada cermin."
-      )
-    elif "JAS WSSF" in nama:
-      return "JAS-Pelaksanaan Caj Pelupusan Sisa Berjadual (Environment Waste Fee) Minimum sebanyak RM5.00/WSSF-Pelaksanaan Caj Bahan Consumable Dan Sanitasi Bengkel"
-    elif "LABOUR SERVICE" in nama:
-      return "Upah kerja pemasangan dan pemeriksaan oleh MECHANIC BERTAULIAH."
-    elif "ALIGNMENT" in nama:
-      return (
-          "(alignment & balancing) untuk memastikan steering"
-          " stabil dan tayar tidak haus sebelah."
-      )
-    elif "OZONE" in nama:
-      return (
-          "Rawatan ozon untuk membunuh bakteria, kulat, dan menyahbau kurang"
-          " menyenangkan di dalam kabin kereta."
-      )
-    elif "CAR WASH" in nama:
-      return "Servis membasuh luar dan dalam kereta supaya bersih berkilat."
-    elif "THROTTLE BODY" in nama:
-      return (
-          "Servis cuci komponen Throttle Body untuk melancarkan semula"
-          " kemasukan angin ke enjin dan mengelakkan enjin 'regat'."
-      )
-    else:
-      return "Komponen atau servis rasmi untuk penjagaan kenderaan Perodua anda."
-
   # --- BAHAGIAN 1: SERVIS ASAS ---
   st.subheader(f"📋 Senarai Servis Asas untuk: {model_pilihan}")
 
@@ -106,16 +54,19 @@ if os.path.exists(nama_fail_excel):
           harga_float = float(harga)
           total_harga += harga_float
 
-          # Paparkan nama item & harga, disertakan butang expander untuk nota/penerangan
           col1, col2 = st.columns([3, 1])
           with col1:
             st.write(f"• **{nama_bersih}**")
           with col2:
             st.write(f"**RM {harga_float:.2f}**")
 
-          # Butang tekan untuk lihat penerangan
-          with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
-            st.write(dapatkan_penerangan(nama_bersih))
+          # Penerangan khas HANYA jika item adalah JAS WSSF
+          if "JAS WSSF" in nama_bersih.upper():
+            with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
+              st.write(
+                  "JAS-Pelaksanaan Caj Pelupusan Sisa Berjadual (Environment Waste Fee) Minimum sebanyak RM5.00/WSSF-Pelaksanaan Caj Bahan Consumable Dan Sanitasi Bengkel"
+                  " Perodua."
+              )
 
         except ValueError:
           pass
@@ -139,7 +90,6 @@ if os.path.exists(nama_fail_excel):
         try:
           harga_addon_float = float(harga_addon)
 
-          # Kotak pilihan untuk servis tambahan
           pilih = st.checkbox(
               f"Tambah **{nama_addon}** (+RM {harga_addon_float:.2f})",
               key=f"addon_row_{index}",
@@ -147,9 +97,13 @@ if os.path.exists(nama_fail_excel):
           if pilih:
             total_harga += harga_addon_float
 
-          # Butang tekan untuk lihat penerangan servis tambahan
-          with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
-            st.write(dapatkan_penerangan(nama_addon))
+          # Penerangan khas HANYA jika item adalah OZONE TREATMENT
+          if "OZONE" in nama_addon.upper():
+            with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
+              st.write(
+                  "Rawatan ozon untuk membunuh bakteria, kulat, dan menyahbau"
+                  " kurang menyenangkan di dalam kabin kereta."
+              )
 
         except ValueError:
           pass
@@ -167,4 +121,4 @@ if os.path.exists(nama_fail_excel):
     )
 
 else:
-  st.error(f"⚠️ Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
+  st.error(f>⚠️ Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
