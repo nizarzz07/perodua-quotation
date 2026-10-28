@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# 2. Hiasan CSS Utama (Tema Putih & Hitam)
+# 2. Hiasan CSS Utama (Tema Putih & Hitam Sepenuhnya)
 st.markdown(
     """
     <style>
@@ -19,20 +19,32 @@ st.markdown(
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        /* Paksa kotak pilihan (selectbox) jadi cerah */
+        .stSelectbox div[data-baseweb="select"] > div {
+            background-color: #f9f9f9 !important;
+            color: #1a1a1a !important;
+            border: 1px solid #ccc !important;
+        }
+        
+        /* Warna teks dalam dropdown pilihan */
+        div[data-baseweb="popover"] div {
+            background-color: #FFFFFF !important;
+            color: #1a1a1a !important;
+        }
+
         .perodua-header-card {
             background: linear-gradient(135deg, #f9f9f9 0%, #f1f1f1 100%);
             border: 2px solid #D71921;
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 15px;
             margin-bottom: 25px;
         }
         
         .perodua-header-card h1 {
             color: #D71921;
-            font-size: 24px;
+            font-size: 22px;
             margin: 10px 0 5px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -40,7 +52,7 @@ st.markdown(
 
         .perodua-header-card p {
             color: #555555;
-            font-size: 14px;
+            font-size: 13px;
             margin: 0;
         }
 
@@ -87,13 +99,14 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 3. PAPARAN LOGO RASMI DI ATAS SEKALI
-if os.path.exists("sarinani_motors_logo.png"):
-  st.image("sarinani_motors_logo.png", use_container_width=True)
-elif os.path.exists("Perodua-Logo.png"):
-  st.image("Perodua-Logo.png", use_container_width=True)
+# 3. PAPARAN LOGO DI ATAS TENGAH & KOTAK TAJUK DI BAWAHNYA
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+  if os.path.exists("sarinani_motors_logo.png"):
+    st.image("sarinani_motors_logo.png", use_container_width=True)
+  elif os.path.exists("Perodua-Logo.png"):
+    st.image("Perodua-Logo.png", use_container_width=True)
 
-# 4. KOTAK TAJUK DI BAWAH LOGO
 st.markdown(
     """
     <div class="perodua-header-card">
@@ -149,10 +162,10 @@ if os.path.exists(nama_fail_excel):
           harga_float = float(harga)
           total_harga += harga_float
 
-          col1, col2 = st.columns([3, 1])
-          with col1:
+          col_a, col_b = st.columns([3, 1])
+          with col_a:
             st.write(f"• **{nama_bersih}**")
-          with col2:
+          with col_b:
             st.write(f"**RM {harga_float:.2f}**")
 
           if "JAS WSSF" in nama_bersih.upper():
