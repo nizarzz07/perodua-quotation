@@ -1,3 +1,4 @@
+import datetime
 import os
 import pandas as pd
 import streamlit as st
@@ -9,15 +10,15 @@ st.set_page_config(
     layout="centered",
 )
 
-# Kamus Terjemahan untuk 3 Bahasa
+# Kamus Terjemahan untuk 3 Bahasa (Slot Masa Jam 9 hingga 3)
 translations = {
     "Malay": {
         "title": "Sistem Pilihan Servis Kenderaan",
         "subtitle": "Perodua Sarinani Motors Sdn Bhd • Rasmi & Profesional",
-        "customer_info": "👤 Maklumat Pelanggan & Temujanji",
+        "customer_info": "👤 Maklumat Pelanggan & Temujanji Kalendar",
         "name_label": "Nama Pelanggan:",
         "plate_label": "No. Pendaftaran Kenderaan (No. Plat):",
-        "day_label": "Pilih Hari Temujanji:",
+        "date_label": "Pilih Tarikh Temujanji (Isnin - Sabtu):",
         "time_label": "Pilih Slot Masa Temujanji:",
         "select_model": "Pilih Model Kenderaan Anda:",
         "basic_service": "📋 Senarai Servis Asas",
@@ -29,9 +30,13 @@ translations = {
         "whatsapp_msg": (
             "Hai Service Advisor Sarinani Motors,%0ASaya ingin membuat temujanji"
             " servis dengan butiran berikut:%0A• Nama: *{name}*%0A• No. Plat:"
-            " *{plate}*%0A• Hari: *{day}*%0A• Slot Masa: *{time}*%0A• Model:"
-            " *{model}*%0A• Anggaran Jumlah: *RM {total}*%0AMohon sahkan slot"
-            " temujanji saya."
+            " *{plate}*%0A• Tarikh: *{date} ({day})*%0A• Slot Masa:"
+            " *{time}*%0A• Model: *{model}*%0A• Anggaran Jumlah: *RM"
+            " {total}*%0AMohon sahkan slot temujanji saya."
+        ),
+        "error_sunday": (
+            "⚠️ Maaf, pusat servis kami tutup pada hari Ahad. Sila pilih"
+            " tarikh dari hari Isnin hingga Sabtu."
         ),
         "jas_wssf_desc": (
             "• **JAS**: Pelaksanaan Caj Pelupusan Sisa Berjadual"
@@ -42,32 +47,32 @@ translations = {
             "Rawatan ozon untuk membunuh bakteria, kulat, dan menyahbau"
             " kurang menyenangkan di dalam kabin kereta."
         ),
-        "days": [
-            "Isnin (Monday)",
-            "Selasa (Tuesday)",
-            "Rabu (Wednesday)",
-            "Khamis (Thursday)",
-            "Jumaat (Friday)",
-            "Sabtu (Saturday)",
-        ],
         "times": [
-            "08:30 Pagi",
-            "09:30 Pagi",
-            "10:30 Pagi",
-            "11:30 Pagi",
-            "01:30 Petang",
-            "02:30 Petang",
-            "03:30 Petang",
-            "04:00 Petang",
+            "09:00 Pagi",
+            "10:00 Pagi",
+            "11:00 Pagi",
+            "12:00 Tengah Hari",
+            "01:00 Petang",
+            "02:00 Petang",
+            "03:00 Petang",
+        ],
+        "day_names": [
+            "Isnin",
+            "Selasa",
+            "Rabu",
+            "Khamis",
+            "Jumaat",
+            "Sabtu",
+            "Ahad",
         ],
     },
     "English": {
         "title": "Vehicle Service Selection System",
         "subtitle": "Perodua Sarinani Motors Sdn Bhd • Official & Professional",
-        "customer_info": "👤 Customer & Appointment Information",
+        "customer_info": "👤 Customer & Calendar Appointment Information",
         "name_label": "Customer Name:",
         "plate_label": "Vehicle Registration Number (Plate No.):",
-        "day_label": "Select Appointment Day:",
+        "date_label": "Select Appointment Date (Monday - Saturday):",
         "time_label": "Select Appointment Time Slot:",
         "select_model": "Select Your Vehicle Model:",
         "basic_service": "📋 Basic Service List",
@@ -81,9 +86,13 @@ translations = {
         "whatsapp_msg": (
             "Hi Service Advisor Sarinani Motors,%0AI would like to book a"
             " service appointment with the following details:%0A• Name:"
-            " *{name}*%0A• Plate No.: *{plate}*%0A• Day: *{day}*%0A• Time Slot:"
-            " *{time}*%0A• Model: *{model}*%0A• Estimated Total: *RM"
+            " *{name}*%0A• Plate No.: *{plate}*%0A• Date: *{date} ({day})*%0A•"
+            " Time Slot: *{time}*%0A• Model: *{model}*%0A• Estimated Total: *RM"
             " {total}*%0APlease confirm my appointment slot."
+        ),
+        "error_sunday": (
+            "⚠️ Sorry, our service center is closed on Sundays. Please choose"
+            " a date from Monday to Saturday."
         ),
         "jas_wssf_desc": (
             "• **JAS**: Scheduled Waste Disposal Fee (Environment Waste Fee)"
@@ -94,32 +103,32 @@ translations = {
             "Ozone treatment to kill bacteria, fungi, and eliminate unpleasant"
             " odors in the car cabin."
         ),
-        "days": [
+        "times": [
+            "09:00 AM",
+            "10:00 AM",
+            "11:00 AM",
+            "12:00 PM",
+            "01:00 PM",
+            "02:00 PM",
+            "03:00 PM",
+        ],
+        "day_names": [
             "Monday",
             "Tuesday",
             "Wednesday",
             "Thursday",
             "Friday",
             "Saturday",
-        ],
-        "times": [
-            "08:30 AM",
-            "09:30 AM",
-            "10:30 AM",
-            "11:30 AM",
-            "01:30 PM",
-            "02:30 PM",
-            "03:30 PM",
-            "04:00 PM",
+            "Sunday",
         ],
     },
     "Chinese": {
         "title": "车辆保养选择系统",
         "subtitle": "Perodua Sarinani Motors Sdn Bhd • 官方与专业",
-        "customer_info": "👤 客户与预约信息",
+        "customer_info": "👤 客户与日历预约信息",
         "name_label": "客户姓名：",
         "plate_label": "车牌号码：",
-        "day_label": "选择预约日期（星期）：",
+        "date_label": "选择预约日期（周一至周六）：",
         "time_label": "选择预约时间段：",
         "select_model": "请选择您的车辆型号：",
         "basic_service": "📋 基本保养清单",
@@ -130,29 +139,39 @@ translations = {
         "whatsapp_btn": "📱 发送至 WhatsApp 服务顾问",
         "whatsapp_msg": (
             "您好 Sarinani Motors 服务顾问，%0AI 想预约保养，详情如下：%0A• 姓名：*{name}*%0A•"
-            " 车牌：*{plate}*%0A• 星期：*{day}*%0A• 时间段：*{time}*%0A• 型号：*{model}*%0A•"
-            " 预估总额： *RM {total}*%0A请帮我确认预约时段。"
+            " 车牌：*{plate}*%0A• 日期：*{date} ({day})*%0A• 时间段：*{time}*%0A•"
+            " 型号：*{model}*%0A• 预估总额： *RM {total}*%0A请帮我确认预约时段。"
+        ),
+        "error_sunday": (
+            "⚠️ 对不起，我们的服务中心周日休息。请选择周一至周六之间的日期。"
         ),
         "jas_wssf_desc": (
             "• **JAS**: 定期废物处理费（环境废物费）最低 RM5.00。\n• **WSSF**:"
             " 车间耗材及消毒费。"
         ),
         "ozone_desc": "臭氧杀菌处理，可杀灭细菌、真菌并消除车厢内的异味。",
-        "days": ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
         "times": [
-            "上午 08:30",
-            "上午 09:30",
-            "上午 10:30",
-            "上午 11:30",
-            "下午 01:30",
-            "下午 02:30",
-            "下午 03:30",
-            "下午 04:00",
+            "上午 09:00",
+            "上午 10:00",
+            "上午 11:00",
+            "中午 12:00",
+            "下午 01:00",
+            "下午 02:00",
+            "下午 03:00",
+        ],
+        "day_names": [
+            "星期一",
+            "星期二",
+            "星期三",
+            "星期四",
+            "星期五",
+            "星期六",
+            "星期日",
         ],
     },
 }
 
-# 2. CSS Kustom untuk Tema Cerah & Kotak Maklumat
+# 2. CSS Kustom untuk Tema Cerah & Kalendar
 st.markdown(
     """
     <style>
@@ -162,7 +181,7 @@ st.markdown(
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        div[data-baseweb="select"] > div, input[type="text"] {
+        div[data-baseweb="select"] > div, input[type="text"], input[type="date"] {
             background-color: #f9f9f9 !important;
             color: #1a1a1a !important;
             border: 1px solid #ccc !important;
@@ -295,147 +314,156 @@ if os.path.exists(nama_fail_excel):
       ]
   ]
 
-  # --- MAKLUMAT PELANGGAN & TEMUJANJI ---
+  # --- MAKLUMAT PELANGGAN & KALENDAR TEMUJANJI ---
   st.markdown(f"### {t['customer_info']}")
   nama_pelanggan = st.text_input(t["name_label"], placeholder="cth: En. Ahmad")
   no_plat = st.text_input(t["plate_label"], placeholder="cth: VAB 1234")
 
-  # Pemilihan Hari dan Masa Temujanji
-  col_day, col_time = st.columns(2)
-  with col_day:
-    pilihan_hari = st.selectbox(t["day_label"], t["days"])
+  col_date, col_time = st.columns(2)
+  with col_date:
+    pilihan_tarikh = st.date_input(
+        t["date_label"], value=datetime.date.today()
+    )
   with col_time:
     pilihan_masa = st.selectbox(t["time_label"], t["times"])
 
-  model_pilihan = st.selectbox(t["select_model"], model_list)
-  total_harga = 0.0
+  # Semak jika hari Ahad
+  is_sunday = pilihan_tarikh.weekday() == 6
 
-  # --- BAHAGIAN 1: SERVIS ASAS ---
-  st.markdown(
-      f'<div class="section-heading">{t["basic_service"]}</div>',
-      unsafe_allow_html=True,
-  )
+  if is_sunday:
+    st.error(t["error_sunday"])
+  else:
+    nama_hari = t["day_names"][pilihan_tarikh.weekday()]
+    model_pilihan = st.selectbox(t["select_model"], model_list)
+    total_harga = 0.0
 
-  for index, row in df.iterrows():
-    item_servis = row["MODEL"]
+    # --- BAHAGIAN 1: SERVIS ASAS ---
+    st.markdown(
+        f'<div class="section-heading">{t["basic_service"]}</div>',
+        unsafe_allow_html=True,
+    )
 
-    if (
-        pd.isna(item_servis)
-        or str(item_servis).strip() == ""
-        or "ADDITIONAL" in str(item_servis).upper()
-    ):
-      break
+    for index, row in df.iterrows():
+      item_servis = row["MODEL"]
 
-    harga = row[model_pilihan]
-    nama_bersih = str(item_servis).replace("*", "").strip()
+      if (
+          pd.isna(item_servis)
+          or str(item_servis).strip() == ""
+          or "ADDITIONAL" in str(item_servis).upper()
+      ):
+        break
 
-    if nama_bersih.upper() != "SUBTOTAL":
-      if pd.notna(harga):
-        try:
-          harga_float = float(harga)
-          total_harga += harga_float
+      harga = row[model_pilihan]
+      nama_bersih = str(item_servis).replace("*", "").strip()
 
-          col_a, col_b = st.columns([3, 1])
-          with col_a:
-            st.write(f"• **{nama_bersih}**")
-          with col_b:
-            st.write(f"**RM {harga_float:.2f}**")
+      if nama_bersih.upper() != "SUBTOTAL":
+        if pd.notna(harga):
+          try:
+            harga_float = float(harga)
+            total_harga += harga_float
 
-          if "JAS WSSF" in nama_bersih.upper():
-            with st.expander(f"ℹ️ Info / 详情: {nama_bersih}"):
-              st.write(t["jas_wssf_desc"])
+            col_a, col_b = st.columns([3, 1])
+            with col_a:
+              st.write(f"• **{nama_bersih}**")
+            with col_b:
+              st.write(f"**RM {harga_float:.2f}**")
 
-        except ValueError:
-          pass
+            if "JAS WSSF" in nama_bersih.upper():
+              with st.expander(f"ℹ️ Info / 详情: {nama_bersih}"):
+                st.write(t["jas_wssf_desc"])
 
-  # --- BAHAGIAN 2: SERVIS TAMBAHAN ---
-  st.markdown(
-      f'<div class="section-heading">{t["additional_service"]}</div>',
-      unsafe_allow_html=True,
-  )
+          except ValueError:
+            pass
 
-  is_addon_section = False
-  for index, row in df.iterrows():
-    item_servis = str(row["MODEL"]).strip()
+    # --- BAHAGIAN 2: SERVIS TAMBAHAN ---
+    st.markdown(
+        f'<div class="section-heading">{t["additional_service"]}</div>',
+        unsafe_allow_html=True,
+    )
 
-    if "ADDITIONAL" in item_servis.upper():
-      is_addon_section = True
-      continue
+    is_addon_section = False
+    for index, row in df.iterrows():
+      item_servis = str(row["MODEL"]).strip()
 
-    if is_addon_section and pd.notna(row["MODEL"]) and row["MODEL"] != "":
-      nama_addon = (
-          str(row["MODEL"]).replace("*", "").strip()
-          if pd.notna(row["MODEL"])
-          else ""
-      )
-      harga_addon = row[df.columns[1]]
+      if "ADDITIONAL" in item_servis.upper():
+        is_addon_section = True
+        continue
 
-      if pd.notna(harga_addon) and str(harga_addon).strip() != "":
-        try:
-          harga_addon_float = float(harga_addon)
+      if is_addon_section and pd.notna(row["MODEL"]) and row["MODEL"] != "":
+        nama_addon = (
+            str(row["MODEL"]).replace("*", "").strip()
+            if pd.notna(row["MODEL"])
+            else ""
+        )
+        harga_addon = row[df.columns[1]]
 
-          pilih = st.checkbox(
-              f"Tambah / Add **{nama_addon}** (+RM {harga_addon_float:.2f})",
-              key=f"addon_row_{index}",
-          )
-          if pilih:
-            total_harga += harga_addon_float
+        if pd.notna(harga_addon) and str(harga_addon).strip() != "":
+          try:
+            harga_addon_float = float(harga_addon)
 
-          if "OZONE" in nama_addon.upper():
-            with st.expander(f"ℹ️ Info / 详情: {nama_addon}"):
-              st.write(t["ozone_desc"])
+            pilih = st.checkbox(
+                f"Tambah / Add **{nama_addon}** (+RM {harga_addon_float:.2f})",
+                key=f"addon_row_{index}",
+            )
+            if pilih:
+              total_harga += harga_addon_float
 
-        except ValueError:
-          pass
+            if "OZONE" in nama_addon.upper():
+              with st.expander(f"ℹ️ Info / 详情: {nama_addon}"):
+                st.write(t["ozone_desc"])
 
-  # --- ANGGARAN MASA SIAP ---
-  st.markdown(
-      f"""
-      <div class="info-card">
-          <b>{t['est_time']}</b><br>
-          <span style="color: #D71921; font-weight: bold;">{t['time_value']}</span>
-      </div>
-      """,
-      unsafe_allow_html=True,
-  )
+          except ValueError:
+            pass
 
-  # --- BAHAGIAN 3: JUMLAH KESELURUHAN ---
-  st.markdown(
-      f"""
-      <div class="grand-total-box">
-          <div class="grand-total-title">{t["grand_total"]}</div>
-          <div class="grand-total-price">RM {total_harga:.2f}</div>
-      </div>
-      """,
-      unsafe_allow_html=True,
-  )
+    # --- ANGGARAN MASA SIAP ---
+    st.markdown(
+        f"""
+        <div class="info-card">
+            <b>{t['est_time']}</b><br>
+            <span style="color: #D71921; font-weight: bold;">{t['time_value']}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-  st.markdown("<br>", unsafe_allow_html=True)
+    # --- BAHAGIAN 3: JUMLAH KESELURUHAN ---
+    st.markdown(
+        f"""
+        <div class="grand-total-box">
+            <div class="grand-total-title">{t["grand_total"]}</div>
+            <div class="grand-total-price">RM {total_harga:.2f}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-  # Format maklumat untuk WhatsApp
-  final_nama = nama_pelanggan if nama_pelanggan else "Tidak Diisi"
-  final_plat = no_plat if no_plat else "Tidak Diisi"
+    st.markdown("<br>", unsafe_allow_html=True)
 
-  pesanan_wa = t["whatsapp_msg"].format(
-      name=final_nama,
-      plate=final_plat,
-      day=pilihan_hari,
-      time=pilihan_masa,
-      model=model_pilihan,
-      total=f"{total_harga:.2f}",
-  )
-  pautan_wa = f"https://wa.me/?text={pesanan_wa}"
+    final_nama = nama_pelanggan if nama_pelanggan else "Tidak Diisi"
+    final_plat = no_plat if no_plat else "Tidak Diisi"
+    formatted_date = pilihan_tarikh.strftime("%d/%m/%Y")
 
-  st.markdown(
-      f"""
-      <a href="{pautan_wa}" target="_blank" style="text-decoration:none;">
-          <div style="background-color:#25D366; color:white; padding:14px; border-radius:8px; text-align:center; font-weight:bold; font-size:16px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
-              {t["whatsapp_btn"]}
-          </div>
-      </a>
-      """,
-      unsafe_allow_html=True,
-  )
+    pesanan_wa = t["whatsapp_msg"].format(
+        name=final_nama,
+        plate=final_plat,
+        date=formatted_date,
+        day=nama_hari,
+        time=pilihan_masa,
+        model=model_pilihan,
+        total=f"{total_harga:.2f}",
+    )
+    pautan_wa = f"https://wa.me/?text={pesanan_wa}"
+
+    st.markdown(
+        f"""
+        <a href="{pautan_wa}" target="_blank" style="text-decoration:none;">
+            <div style="background-color:#25D366; color:white; padding:14px; border-radius:8px; text-align:center; font-weight:bold; font-size:16px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
+                {t["whatsapp_btn"]}
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
 
 else:
   st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
