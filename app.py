@@ -23,23 +23,24 @@ st.markdown(
             background: linear-gradient(135deg, #f9f9f9 0%, #f1f1f1 100%);
             border: 2px solid #D71921;
             border-radius: 12px;
-            padding: 20px;
-            text-align: left;
+            padding: 25px;
+            text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 15px;
             margin-bottom: 25px;
         }
         
         .perodua-header-card h1 {
             color: #D71921;
-            font-size: 20px;
-            margin: 0 0 5px 0;
+            font-size: 24px;
+            margin: 10px 0 5px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .perodua-header-card p {
             color: #555555;
-            font-size: 13px;
+            font-size: 14px;
             margin: 0;
         }
 
@@ -86,25 +87,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 3. SUSUNAN ATAS: LOGO DI KIRI (KECIL) & TAJUK DI KANAN
-col_logo, col_title = st.columns([1, 2.5])
+# 3. PAPARAN LOGO RASMI DI ATAS SEKALI
+if os.path.exists("sarinani_motors_logo.png"):
+  st.image("sarinani_motors_logo.png", use_container_width=True)
+elif os.path.exists("Perodua-Logo.png"):
+  st.image("Perodua-Logo.png", use_container_width=True)
 
-with col_logo:
-  if os.path.exists("sarinani_motors_logo.png"):
-    st.image("sarinani_motors_logo.png", use_container_width=True)
-  elif os.path.exists("Perodua-Logo.png"):
-    st.image("Perodua-Logo.png", use_container_width=True)
-
-with col_title:
-  st.markdown(
-      """
-      <div class="perodua-header-card">
-          <h1>Sistem Pilihan Servis Kenderaan</h1>
-          <p>Perodua Sarinani Motors Sdn Bhd • Rasmi & Profesional</p>
-      </div>
-      """,
-      unsafe_allow_html=True,
-  )
+# 4. KOTAK TAJUK DI BAWAH LOGO
+st.markdown(
+    """
+    <div class="perodua-header-card">
+        <h1>Sistem Pilihan Servis Kenderaan</h1>
+        <p>Perodua Sarinani Motors Sdn Bhd • Rasmi & Profesional</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 nama_fail_excel = "BASIC SERVICE NIZAR.xlsx"
 
