@@ -60,12 +60,14 @@ if os.path.exists(nama_fail_excel):
           with col2:
             st.write(f"**RM {harga_float:.2f}**")
 
-          # Penerangan khas HANYA jika item adalah JAS WSSF
+          # Penerangan khas untuk JAS WSSF
           if "JAS WSSF" in nama_bersih.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_bersih}"):
               st.write(
-                  "JAS-Pelaksanaan Caj Pelupusan Sisa Berjadual (Environment Waste Fee) Minimum sebanyak RM5.00/WSSF-Pelaksanaan Caj Bahan Consumable Dan Sanitasi Bengkel"
-                  " Perodua."
+                  "• **JAS**: Pelaksanaan Caj Pelupusan Sisa Berjadual"
+                  " (Environment Waste Fee) minimum sebanyak RM5.00.\n•"
+                  " **WSSF**: Pelaksanaan Caj Bahan Consumable dan Sanitasi"
+                  " Bengkel."
               )
 
         except ValueError:
@@ -97,7 +99,7 @@ if os.path.exists(nama_fail_excel):
           if pilih:
             total_harga += harga_addon_float
 
-          # Penerangan khas HANYA jika item adalah OZONE TREATMENT
+          # Penerangan khas untuk OZONE TREATMENT
           if "OZONE" in nama_addon.upper():
             with st.expander(f"ℹ️ Ketik untuk lihat penerangan: {nama_addon}"):
               st.write(
@@ -121,4 +123,5 @@ if os.path.exists(nama_fail_excel):
     )
 
 else:
+  st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
   st.error(f>⚠️ Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
