@@ -208,6 +208,9 @@ if os.path.exists(nama_fail_excel):
       unsafe_allow_html=True,
   )
 
+  # Tambah jarak kosong (*vertical space*) menggunakan st.markdown
+  st.markdown("<br>", unsafe_allow_html=True)
+
   pesanan_wa = (
       f"Hai Service Advisor Sarinani Motors,%0ASaya berminat dengan sebut"
       f" harga bagi model *{model_pilihan}*%0AAnggaran Jumlah:"
@@ -215,11 +218,11 @@ if os.path.exists(nama_fail_excel):
   )
   pautan_wa = f"https://wa.me/?text={pesanan_wa}"
 
-  # Butang WhatsApp sahaja
+  # Butang WhatsApp dengan jarak yang lebih selesa
   st.markdown(
       f"""
       <a href="{pautan_wa}" target="_blank" style="text-decoration:none;">
-          <div style="background-color:#25D366; color:white; padding:12px; border-radius:8px; text-align:center; font-weight:bold; font-size:16px;">
+          <div style="background-color:#25D366; color:white; padding:14px; border-radius:8px; text-align:center; font-weight:bold; font-size:16px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
               📱 Hantar ke WhatsApp Service Advisor
           </div>
       </a>
