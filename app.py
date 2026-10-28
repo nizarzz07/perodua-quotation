@@ -202,4 +202,30 @@ if os.path.exists(nama_fail_excel):
       f"""
       <div class="grand-total-box">
           <div class="grand-total-title">ANGGARAN KESELURUHAN (GRAND TOTAL)</div>
-          <div class="grand-total-price">RM {total_harga:.2f
+          <div class="grand-total-price">RM {total_harga:.2f}</div>
+      </div>
+      """,
+      unsafe_allow_html=True,
+  )
+
+  pesanan_wa = (
+      f"Hai Service Advisor Sarinani Motors,%0ASaya berminat dengan sebut"
+      f" harga bagi model *{model_pilihan}*%0AAnggaran Jumlah:"
+      f" *RM {total_harga:.2f}*%0AMohon sahkan slot temujanji servis saya."
+  )
+  pautan_wa = f"https://wa.me/?text={pesanan_wa}"
+
+  # Butang WhatsApp sahaja
+  st.markdown(
+      f"""
+      <a href="{pautan_wa}" target="_blank" style="text-decoration:none;">
+          <div style="background-color:#25D366; color:white; padding:12px; border-radius:8px; text-align:center; font-weight:bold; font-size:16px;">
+              📱 Hantar ke WhatsApp Service Advisor
+          </div>
+      </a>
+      """,
+      unsafe_allow_html=True,
+  )
+
+else:
+  st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
