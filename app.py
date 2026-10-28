@@ -203,5 +203,3 @@ if os.path.exists(nama_fail_excel):
       <div class="grand-total-box">
           <div class="grand-total-title">ANGGARAN KESELURUHAN (GRAND TOTAL)</div>
           <div class="grand-total-price">RM {total_harga:.2f
-else:
-  st.error(f"Fail '{nama_fail_excel}' tidak dijumpai di dalam folder!")
