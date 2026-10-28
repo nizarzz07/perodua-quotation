@@ -12,7 +12,7 @@ st.set_page_config(
 # Kamus Terjemahan untuk 3 Bahasa
 translations = {
     "Malay": {
-        "title": "Sistem Pilihan Servis Kenderaan",
+        "title": "Sistem Pilihan Servis Kenderaan Nizar",
         "subtitle": "Perodua Sarinani Motors Sdn Bhd • Rasmi & Profesional",
         "select_model": "Pilih Model Kenderaan Anda:",
         "basic_service": "📋 Senarai Servis Asas",
